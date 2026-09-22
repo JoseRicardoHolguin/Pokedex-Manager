@@ -3,6 +3,7 @@ import { useAuth } from '../context/useAuth';
 import api from '../api/axios';
 import SearchBar from '../components/SearchBar';
 import PokemonCard from '../components/PokemonCard';
+import logo from '../assets/pokemon_logo.png';
 
 function Dashboard() {
   const { user, logout } = useAuth();
