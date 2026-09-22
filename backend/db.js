@@ -24,8 +24,14 @@ db.exec(`
     sprite_url TEXT,
     nickname TEXT,
     added_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-  )
-`);
+    FOREIGN KEY (user_id) REFERENCES users(id))
+    `
+  );
+// Migración: agregar columna types si no existe (para versiones previas de la BD)
+  try {
+    db.exec(`ALTER TABLE collection ADD COLUMN types TEXT`);
+  } catch (err) {
+    // La columna ya existe, no pasa nada
+  }
 
 export default db;

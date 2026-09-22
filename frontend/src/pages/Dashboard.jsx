@@ -3,7 +3,7 @@ import { useAuth } from '../context/useAuth';
 import api from '../api/axios';
 import SearchBar from '../components/SearchBar';
 import PokemonCard from '../components/PokemonCard';
-import logo from '../assets/pokemon_logo.png';
+import PokemonDetailModal from '../components/PokemonDetailModal';
 
 function Dashboard() {
   const { user, logout } = useAuth();
@@ -12,6 +12,8 @@ function Dashboard() {
   const [searchError, setSearchError] = useState('');
   const [collection, setCollection] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [detailPokemon, setDetailPokemon] = useState(null);
+
 
   // Cargar la colección al montar el componente
   useEffect(() => {
@@ -44,16 +46,17 @@ function Dashboard() {
 
   const handleAdd = async (pokemon) => {
     try {
-      await api.post('/pokemon/collection', {
+        await api.post('/pokemon/collection', {
         pokemon_id: pokemon.id,
         pokemon_name: pokemon.name,
         sprite_url: pokemon.sprite,
-      });
-      loadCollection();
+        types: pokemon.types,
+        });
+        loadCollection();
     } catch (err) {
-      console.error('Error al agregar a la colección', err);
+        console.error('Error al agregar a la colección', err);
     }
-  };
+    };
 
   const handleRemove = async (item) => {
     try {
@@ -63,6 +66,21 @@ function Dashboard() {
       console.error('Error al eliminar de la colección', err);
     }
   };
+
+  const handleViewDetails = async (item) => {
+  // Si ya viene con stats (resultado de búsqueda), úsalo directo
+  if (item.stats) {
+    setDetailPokemon(item);
+    return;
+  }
+  // Si es un ítem de colección (sin stats guardados), pide los datos frescos
+  try {
+    const res = await api.get(`/pokemon/search/${item.pokemon_id}`);
+    setDetailPokemon(res.data);
+  } catch (err) {
+    console.error('Error al cargar detalles', err);
+  }
+};
 
   return (
     <div className="dashboard">
@@ -82,11 +100,12 @@ function Dashboard() {
         {searchError && <p className="error">{searchError}</p>}
 
         {searchResult && (
-          <PokemonCard
+        <PokemonCard
             pokemon={searchResult}
             onAction={handleAdd}
             actionLabel="Agregar a mi colección"
-          />
+            onCardClick={handleViewDetails}
+        />
         )}
       </section>
 
@@ -103,11 +122,15 @@ function Dashboard() {
                 pokemon={item}
                 onAction={handleRemove}
                 actionLabel="Eliminar"
+                onCardClick={handleViewDetails}
               />
             ))}
           </div>
         )}
       </section>
+      {detailPokemon && (
+            <PokemonDetailModal pokemon={detailPokemon} onClose={() => setDetailPokemon(null)} />
+        )}
     </div>
   );
 }

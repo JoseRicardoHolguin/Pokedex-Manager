@@ -1,12 +1,22 @@
-function PokemonCard({ pokemon, onAction, actionLabel }) {
+function PokemonCard({ pokemon, onAction, actionLabel, onCardClick }) {
+  const types = Array.isArray(pokemon.types)
+    ? pokemon.types
+    : pokemon.types
+    ? JSON.parse(pokemon.types)
+    : [];
+
   return (
-    <div className="pokemon-card">
+    <div
+      className={`pokemon-card ${types[0] ? `type-bg-${types[0]}` : ''}`}
+      onClick={() => onCardClick?.(pokemon)}
+      style={{ cursor: onCardClick ? 'pointer' : 'default' }}
+    >
       <img src={pokemon.sprite || pokemon.sprite_url} alt={pokemon.name || pokemon.pokemon_name} />
       <h3>{pokemon.nickname || pokemon.name || pokemon.pokemon_name}</h3>
 
-      {pokemon.types && (
+      {types.length > 0 && (
         <div className="types">
-          {pokemon.types.map((type) => (
+          {types.map((type) => (
             <span key={type} className={`type-badge type-${type}`}>
               {type}
             </span>
@@ -14,8 +24,25 @@ function PokemonCard({ pokemon, onAction, actionLabel }) {
         </div>
       )}
 
+      {pokemon.stats && (
+        <div className="stats">
+          {pokemon.stats.map((stat) => (
+            <span key={stat.name}>
+              {stat.name}: {stat.value}
+            </span>
+          ))}
+        </div>
+      )}
+
       {onAction && (
-        <button onClick={() => onAction(pokemon)}>{actionLabel}</button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onAction(pokemon);
+          }}
+        >
+          {actionLabel}
+        </button>
       )}
     </div>
   );

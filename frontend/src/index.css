@@ -218,13 +218,57 @@ body {
 }
 
 .type-badge {
-  background: #eee;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-size: 0.75rem;
   text-transform: capitalize;
-  color: #333;
+  color: white;
+  font-weight: 600;
 }
+
+/* Colores por tipo — badges */
+.type-normal   { background: #A8A878; }
+.type-fire     { background: #F08030; }
+.type-water    { background: #6890F0; }
+.type-electric { background: #F8D030; color: #333; }
+.type-grass    { background: #78C850; }
+.type-ice      { background: #98D8D8; color: #333; }
+.type-fighting { background: #C03028; }
+.type-poison   { background: #A040A0; }
+.type-ground   { background: #E0C068; color: #333; }
+.type-flying   { background: #A890F0; }
+.type-psychic  { background: #F85888; }
+.type-bug      { background: #A8B820; }
+.type-rock     { background: #B8A038; }
+.type-ghost    { background: #705898; }
+.type-dragon   { background: #7038F8; }
+.type-dark     { background: #705848; }
+.type-steel    { background: #B8B8D0; color: #333; }
+.type-fairy    { background: #EE99AC; color: #333; }
+
+/* Acento de color en la tarjeta según tipo principal */
+.pokemon-card {
+  border-left: 6px solid #ccc;
+}
+
+.type-bg-normal   { border-left-color: #A8A878; background: linear-gradient(to right, #A8A87815, white 15%); }
+.type-bg-fire     { border-left-color: #F08030; background: linear-gradient(to right, #F0803015, white 15%); }
+.type-bg-water    { border-left-color: #6890F0; background: linear-gradient(to right, #6890F015, white 15%); }
+.type-bg-electric { border-left-color: #F8D030; background: linear-gradient(to right, #F8D03015, white 15%); }
+.type-bg-grass    { border-left-color: #78C850; background: linear-gradient(to right, #78C85015, white 15%); }
+.type-bg-ice      { border-left-color: #98D8D8; background: linear-gradient(to right, #98D8D815, white 15%); }
+.type-bg-fighting { border-left-color: #C03028; background: linear-gradient(to right, #C0302815, white 15%); }
+.type-bg-poison   { border-left-color: #A040A0; background: linear-gradient(to right, #A0404015, white 15%); }
+.type-bg-ground   { border-left-color: #E0C068; background: linear-gradient(to right, #E0C06815, white 15%); }
+.type-bg-flying   { border-left-color: #A890F0; background: linear-gradient(to right, #A890F015, white 15%); }
+.type-bg-psychic  { border-left-color: #F85888; background: linear-gradient(to right, #F8588815, white 15%); }
+.type-bg-bug      { border-left-color: #A8B820; background: linear-gradient(to right, #A8B82015, white 15%); }
+.type-bg-rock     { border-left-color: #B8A038; background: linear-gradient(to right, #B8A03815, white 15%); }
+.type-bg-ghost    { border-left-color: #705898; background: linear-gradient(to right, #70589815, white 15%); }
+.type-bg-dragon   { border-left-color: #7038F8; background: linear-gradient(to right, #7038F815, white 15%); }
+.type-bg-dark     { border-left-color: #705848; background: linear-gradient(to right, #70584815, white 15%); }
+.type-bg-steel    { border-left-color: #B8B8D0; background: linear-gradient(to right, #B8B8D015, white 15%); }
+.type-bg-fairy    { border-left-color: #EE99AC; background: linear-gradient(to right, #EE99AC15, white 15%); }
 
 .stats {
   display: flex;
@@ -282,4 +326,99 @@ body {
   opacity: 0.06;
   z-index: -1;
   pointer-events: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #eee;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.modal-sprite {
+  width: 140px;
+  height: 140px;
+}
+
+.modal-content h2 {
+  text-transform: capitalize;
+  margin-bottom: 0.75rem;
+}
+
+.modal-info {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.modal-stats {
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-name {
+  width: 100px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  color: #555;
+}
+
+.stat-bar-bg {
+  flex: 1;
+  background: #eee;
+  border-radius: 6px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  background: #ee1515;
+  height: 100%;
+}
+
+.stat-value {
+  width: 30px;
+  font-size: 0.75rem;
+  text-align: right;
 }

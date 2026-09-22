@@ -38,12 +38,17 @@ router.get('/collection', requireAuth, (req, res) => {
     .prepare('SELECT * FROM collection WHERE user_id = ? ORDER BY added_at DESC')
     .all(req.user.id);
 
-  res.json(items);
+  const parsed = items.map((item) => ({
+    ...item,
+    types: item.types ? JSON.parse(item.types) : [],
+  }));
+
+  res.json(parsed);
 });
 
 // Agregar un Pokémon a la colección
 router.post('/collection', requireAuth, (req, res) => {
-  const { pokemon_id, pokemon_name, sprite_url, nickname } = req.body;
+  const { pokemon_id, pokemon_name, sprite_url, nickname, types } = req.body;
 
   if (!pokemon_id || !pokemon_name) {
     return res.status(400).json({ error: 'pokemon_id y pokemon_name son requeridos' });
@@ -51,9 +56,9 @@ router.post('/collection', requireAuth, (req, res) => {
 
   const result = db
     .prepare(
-      'INSERT INTO collection (user_id, pokemon_id, pokemon_name, sprite_url, nickname) VALUES (?, ?, ?, ?, ?)'
+      'INSERT INTO collection (user_id, pokemon_id, pokemon_name, sprite_url, nickname, types) VALUES (?, ?, ?, ?, ?, ?)'
     )
-    .run(req.user.id, pokemon_id, pokemon_name, sprite_url || null, nickname || null);
+    .run(req.user.id, pokemon_id, pokemon_name, sprite_url || null, nickname || null, types ? JSON.stringify(types) : null);
 
   res.status(201).json({ id: result.lastInsertRowid });
 });
